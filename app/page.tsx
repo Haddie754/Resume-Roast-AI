@@ -180,8 +180,8 @@ function FAQ() {
       a: "No. We only critique what you actually wrote. If you're missing a metric, we suggest placeholders like [add number] instead of inventing data.",
     },
     {
-      q: "Can I upload a PDF?",
-      a: "Not yet. For now, copy and paste your resume text. PDF upload is coming soon.",
+      q: "Can I upload my resume file?",
+      a: "Yes. You can upload a PDF, Word doc (.docx), or plain text file — or just paste your resume text directly. Either way works.",
     },
     {
       q: "Do I need to sign up?",
