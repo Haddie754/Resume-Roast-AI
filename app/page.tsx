@@ -24,7 +24,7 @@ function Hero() {
         Find out if your resume is <span className="text-brand-500">cooked.</span>
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300">
-        Upload your resume and get a brutally honest AI roast with fixes that actually help you get interviews.
+        Upload your resume and get honest, actionable feedback with fixes that actually help you get interviews.
       </p>
       <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Link
@@ -47,9 +47,9 @@ function Hero() {
 
 function HowItWorks() {
   const steps = [
-    { n: "1", t: "Paste your resume", d: "Drop it in. No PDF wrangling yet — paste-text is the MVP." },
-    { n: "2", t: "Tell us your target", d: "Role, school, year, and whether you need sponsorship." },
-    { n: "3", t: "Get roasted", d: "A score, a diagnosis, the 5 things to fix, and rewritten bullets." },
+    { n: "1", t: "Paste your resume", d: "Drop it in and tell us your target role and school." },
+    { n: "2", t: "Share your context", d: "Your year, major, and whether you need visa sponsorship." },
+    { n: "3", t: "Get feedback", d: "A score, diagnosis, top 5 problems to fix, and better bullet points." },
   ];
   return (
     <section>
@@ -74,7 +74,7 @@ function ExampleRoast() {
   return (
     <section>
       <h2 className="text-3xl font-bold text-white sm:text-4xl">Example roast</h2>
-      <p className="mt-2 text-zinc-400">An actual taste of what you&apos;ll get.</p>
+      <p className="mt-2 text-zinc-400">Here's what real feedback looks like.</p>
       <div className="mt-8 rounded-2xl border border-white/10 bg-zinc-900/60 p-6">
         <div className="flex items-center justify-between">
           <span className="rounded-full bg-orange-500/20 px-3 py-1 text-sm font-semibold text-orange-300">
@@ -83,7 +83,7 @@ function ExampleRoast() {
           <span className="text-4xl font-extrabold text-orange-400">62<span className="text-base text-zinc-500">/100</span></span>
         </div>
         <p className="mt-4 text-zinc-200">
-          Your resume reads like a LinkedIn skills section had a baby with a club fair flyer. &quot;Familiar with Python&quot; is not a personality trait — show me what you built with it. Right now a recruiter spends 7 seconds on this and walks away knowing your major and nothing else.
+          Your resume reads like a LinkedIn skills section had a baby with a club fair flyer. &quot;Familiar with Python&quot; is not a personality trait. Show me what you built with it. Right now a recruiter spends 7 seconds on this and walks away knowing your major and nothing else.
         </p>
         <div className="mt-6 rounded-lg border border-white/10 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">Before</p>
@@ -104,7 +104,7 @@ function FreeVsPro() {
   return (
     <section>
       <h2 className="text-3xl font-bold text-white sm:text-4xl">Free vs Pro</h2>
-      <p className="mt-2 text-zinc-400">Start free. Upgrade when you want the heavy machinery.</p>
+      <p className="mt-2 text-zinc-400">Start free. Upgrade when you're ready for more tools.</p>
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <PlanRow
           title="Free"
@@ -117,11 +117,11 @@ function FreeVsPro() {
         />
         <PlanRow
           title="Pro"
-          price="$9/mo"
+          price="$3.99/mo"
           highlight
           features={[
             "Unlimited roasts",
-            "Resume Worker (JD-targeted edits)",
+            "Resume Worker",
             "Cover Letter Writer",
             "ATS optimization",
             "Saved resume versions",
@@ -172,20 +172,20 @@ function PlanRow({
 function FAQ() {
   const items = [
     {
-      q: "Is the AI actually going to be mean?",
-      a: "Funny, sharp, and honest — but never cruel and never about identity, background, or visa status. The whole point is to help you ship a better resume.",
+      q: "Will the feedback be harsh?",
+      a: "Honest and funny, yes. But never cruel. We focus on your resume, not you. And we're always respectful about visa status and background.",
     },
     {
-      q: "Will it make up experience for me?",
-      a: "No. We tell the model to only critique what you actually wrote. If a metric is missing it suggests placeholders like [add metric] instead of inventing numbers.",
+      q: "Will you make up experience for me?",
+      a: "No. We only critique what you actually wrote. If you're missing a metric, we suggest placeholders like [add number] instead of inventing data.",
     },
     {
       q: "Can I upload a PDF?",
-      a: "Not yet — MVP is paste-text only. PDF upload is on the roadmap.",
+      a: "Not yet. For now, copy and paste your resume text. PDF upload is coming soon.",
     },
     {
-      q: "Do I need an account?",
-      a: "Not for your first roast. Accounts come with Supabase auth in a later release.",
+      q: "Do I need to sign up?",
+      a: "No account needed for your first roast. You can save and track your roasts later if you want.",
     },
   ];
   return (
