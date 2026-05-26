@@ -16,12 +16,11 @@ export async function POST(req: NextRequest) {
     if (fileName.endsWith(".txt")) {
       text = buffer.toString("utf-8");
     } else if (fileName.endsWith(".pdf")) {
-      // pdf-parse v2 uses a PDFParse class with getText() method
-      const { PDFParse } = await import("pdf-parse");
-      const parser = new PDFParse({ data: new Uint8Array(buffer) });
-      const result = await parser.getText();
-      text = result.text;
-      await parser.destroy();
+      // pdf-parse v1.1.1 — import internal path to skip its test-file loader
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const pdfParse = require("pdf-parse/lib/pdf-parse.js");
+      const data = await pdfParse(buffer);
+      text = data.text;
     } else if (fileName.endsWith(".docx")) {
       const mammoth = await import("mammoth");
       const result = await mammoth.extractRawText({ buffer });
