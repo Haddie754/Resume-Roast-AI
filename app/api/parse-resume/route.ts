@@ -41,9 +41,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ text: text.trim() });
   } catch (err) {
-    console.error("parse-resume error:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("parse-resume error:", message);
     return NextResponse.json(
-      { error: "Failed to read file. Try pasting your resume instead." },
+      { error: `Failed to read file: ${message}. Try pasting your resume instead.` },
       { status: 500 }
     );
   }
