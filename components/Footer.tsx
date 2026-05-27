@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 text-white">
               <span className="text-xl">🔥</span>
-              <span className="font-semibold">Resume Roast</span>
+              <span className="font-semibold">FireThis</span>
             </div>
             <p className="mt-1 text-sm text-zinc-400">
               Brutally honest AI feedback for students who actually want callbacks.
@@ -22,7 +22,7 @@ export default function Footer() {
           </div>
         </div>
         <p className="mt-8 text-xs text-zinc-500">
-          © {new Date().getFullYear()} Resume Roast. Not affiliated with your dream company. Yet.
+          © {new Date().getFullYear()} FireThis. Not affiliated with your dream company. Yet.
         </p>
       </div>
     </footer>

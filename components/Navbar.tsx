@@ -17,7 +17,7 @@ export default async function Navbar() {
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-bold text-white">
           <span className="text-2xl">🔥</span>
-          <span className="text-lg tracking-tight">Resume Roast</span>
+          <span className="text-lg tracking-tight">FireThis</span>
         </Link>
         <div className="hidden items-center gap-1 sm:flex">
           {links.map((link) => (

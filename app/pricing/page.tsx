@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LEMON_SQUEEZY_CHECKOUT } from "@/lib/billing";
+import { createClient } from "@/lib/supabase/server";
 
 interface Plan {
   name: string;
@@ -7,54 +9,74 @@ interface Plan {
   description: string;
   features: string[];
   cta: string;
+  href?: string;
   highlight?: boolean;
+  badge?: string;
 }
 
-const plans: Plan[] = [
-  {
-    name: "Free",
-    price: "$0",
-    cadence: "forever",
-    description: "Get a taste of the roast.",
-    features: [
-      "1 resume roast per month",
-      "Cooked Score",
-      "Top 3 fixes",
-    ],
-    cta: "Start free",
-  },
-  {
-    name: "Pro",
-    price: "$3.99",
-    cadence: "per month",
-    description: "Everything you need to actually land interviews.",
-    features: [
-      "Unlimited resume roasts",
-      "Resume Worker",
-      "Cover Letter Writer",
-      "ATS optimization",
-      "Saved resume versions",
-    ],
-    cta: "Upgrade to Pro",
-    highlight: true,
-  },
-  {
-    name: "International Pro",
-    price: "$7.99",
-    cadence: "per month",
-    description: "Built for F-1/OPT students who need a sharper edge.",
-    features: [
-      "Everything in Pro",
-      "Sponsorship-aware suggestions",
-      "F-1/OPT-focused job strategy",
-      "Company targeting for visa-friendly roles",
-      "Cover letter guidance for visa context",
-    ],
-    cta: "Upgrade to International Pro",
-  },
-];
+export default async function PricingPage() {
+  // Pass the signed-in user's email through to Lemon Squeezy so the checkout
+  // is prefilled (and the webhook later can match the customer back to them).
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-export default function PricingPage() {
+  const email = user?.email ?? "";
+  const emailParam = email ? `?checkout[email]=${encodeURIComponent(email)}` : "";
+
+  const proCheckout = `${LEMON_SQUEEZY_CHECKOUT.pro}${emailParam}`;
+  const intlProCheckout = `${LEMON_SQUEEZY_CHECKOUT.international_pro}${emailParam}`;
+
+  const plans: Plan[] = [
+    {
+      name: "Free",
+      price: "$0",
+      cadence: "forever",
+      description: "Get a taste of the fire.",
+      features: [
+        "1 resume roast per month",
+        "Cooked Score + diagnosis",
+        "Top 3 fixes",
+      ],
+      cta: user ? "You're on Free" : "Start free",
+      href: user ? "/roast" : "/auth/sign-up",
+    },
+    {
+      name: "Pro",
+      price: "$3.99",
+      cadence: "per month",
+      description: "Everything you need to actually land interviews.",
+      features: [
+        "Unlimited resume roasts",
+        "Resume Worker (tailor to any JD)",
+        "Cover Letter Writer",
+        "ATS optimization + keyword match",
+        "Saved roast history",
+      ],
+      cta: "Upgrade to Pro",
+      href: proCheckout,
+      highlight: true,
+      badge: "Most popular",
+    },
+    {
+      name: "International Pro",
+      price: "$7.99",
+      cadence: "per month",
+      description: "Built for F-1 / OPT students fighting for sponsorship.",
+      features: [
+        "Everything in Pro",
+        "Sponsorship-aware resume feedback",
+        "OPT / CPT timeline guidance",
+        "Visa-friendly company targeting",
+        "Cover letters that handle visa context",
+      ],
+      cta: "Upgrade to International Pro",
+      href: intlProCheckout,
+      badge: "F-1 friendly",
+    },
+  ];
+
   return (
     <div className="space-y-12">
       <header className="text-center">
@@ -62,8 +84,16 @@ export default function PricingPage() {
           Pricing
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-zinc-400">
-          Start free. Upgrade when you&apos;re applying for real. Payments aren&apos;t live yet — early
-          access spots open soon.
+          Start free. Upgrade when you&apos;re applying for real.
+          {!user && (
+            <>
+              {" "}
+              <Link href="/auth/sign-up" className="text-brand-400 hover:underline">
+                Sign up
+              </Link>{" "}
+              to get your first roast on us.
+            </>
+          )}
         </p>
       </header>
 
@@ -77,9 +107,15 @@ export default function PricingPage() {
                 : "border-white/10 bg-zinc-900/60"
             }`}
           >
-            {plan.highlight && (
-              <span className="mb-4 inline-block w-fit rounded-full bg-brand-500/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-100">
-                Most popular
+            {plan.badge && (
+              <span
+                className={`mb-4 inline-block w-fit rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                  plan.highlight
+                    ? "bg-brand-500/30 text-brand-100"
+                    : "bg-white/10 text-zinc-200"
+                }`}
+              >
+                {plan.badge}
               </span>
             )}
             <h2 className="text-2xl font-bold text-white">{plan.name}</h2>
@@ -98,24 +134,62 @@ export default function PricingPage() {
               ))}
             </ul>
 
-            <button
-              disabled
-              className={`mt-8 cursor-not-allowed rounded-md px-4 py-2.5 text-sm font-semibold ${
-                plan.highlight
-                  ? "bg-brand-500/70 text-white"
-                  : "bg-white/10 text-zinc-200"
-              }`}
-              title="Payments coming soon"
-            >
-              {plan.cta} — coming soon
-            </button>
+            {plan.href ? (
+              <Link
+                href={plan.href}
+                target={plan.href.startsWith("http") ? "_blank" : undefined}
+                rel={plan.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className={`mt-8 inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-semibold transition-colors ${
+                  plan.highlight
+                    ? "bg-brand-500 text-white hover:bg-brand-600"
+                    : "bg-white/10 text-white hover:bg-white/15"
+                }`}
+              >
+                {plan.cta}
+              </Link>
+            ) : (
+              <span
+                className={`mt-8 inline-flex cursor-not-allowed items-center justify-center rounded-md px-4 py-2.5 text-sm font-semibold ${
+                  plan.highlight
+                    ? "bg-brand-500/70 text-white"
+                    : "bg-white/10 text-zinc-200"
+                }`}
+              >
+                {plan.cta}
+              </span>
+            )}
           </div>
         ))}
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6 text-center text-zinc-300">
-        Want early access? <Link href="/roast" className="text-brand-400 hover:underline">Try the free roast</Link> in the meantime.
+      <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6 text-center text-sm text-zinc-400">
+        Questions? <Link href="/roast" className="text-brand-400 hover:underline">Try the free roast</Link> first
+        — no card required.
       </div>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <FaqItem
+          q="Can I cancel anytime?"
+          a="Yes. Cancel from your billing portal in one click. No retention calls, no guilt."
+        />
+        <FaqItem
+          q="What's the difference between Pro and Intl Pro?"
+          a="Intl Pro adds F-1 / OPT-specific feedback, sponsorship signal, and visa-friendly company targeting."
+        />
+        <FaqItem
+          q="Is my data safe?"
+          a="Your resume is stored on your account only. We don't share it, sell it, or train on it."
+        />
+      </div>
+    </div>
+  );
+}
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
+      <p className="font-semibold text-white">{q}</p>
+      <p className="mt-2 text-sm text-zinc-400">{a}</p>
     </div>
   );
 }

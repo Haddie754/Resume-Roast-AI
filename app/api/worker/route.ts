@@ -6,6 +6,7 @@ import {
   WORKER_SYSTEM_PROMPT,
   buildWorkerPrompt,
 } from "@/lib/prompts/resumeWorkerPrompt";
+import { requirePaidUser } from "@/lib/auth/requirePaid";
 
 export const runtime = "nodejs";
 
@@ -26,6 +27,10 @@ export interface WorkerResult {
 }
 
 export async function POST(req: NextRequest) {
+  // Gate: must be signed in + on a paid plan
+  const gate = await requirePaidUser();
+  if (!gate.ok) return gate.response;
+
   let body: unknown;
   try {
     body = await req.json();

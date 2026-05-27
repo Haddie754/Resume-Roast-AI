@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Resume Roast — Find out if your resume is cooked",
+  title: "FireThis — Get Fired Up. Get Hired.",
   description:
-    "Upload your resume and get a brutally honest AI roast with fixes that actually help you get interviews.",
+    "Brutally honest AI feedback on your resume — built for college students, with dedicated F-1 / OPT support. Get hired faster.",
 };
 
 export default function RootLayout({

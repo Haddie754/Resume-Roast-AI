@@ -18,20 +18,20 @@ function Hero() {
     <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 px-6 py-20 text-center sm:py-28">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.18),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.10),transparent_60%)]" />
       <span className="inline-block rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wider text-zinc-300">
-        For students who actually want callbacks
+        For college students who actually want callbacks
       </span>
       <h1 className="mx-auto mt-6 max-w-3xl text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
-        Find out if your resume is <span className="text-brand-500">cooked.</span>
+        Get <span className="text-brand-500">Fired.</span> Get Hired.
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300">
-        Upload your resume and get honest, actionable feedback with fixes that actually help you get interviews.
+        Brutally honest AI feedback on your resume — with real fixes that get you interviews. Built for students, with dedicated F-1 / OPT support.
       </p>
       <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Link
           href="/roast"
           className="inline-flex items-center gap-2 rounded-md bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-500/20 hover:bg-brand-600"
         >
-          🔥 Roast My Resume
+          🔥 Fire This Resume
         </Link>
         <Link
           href="/pricing"
@@ -217,7 +217,7 @@ function FinalCTA() {
         href="/roast"
         className="mt-6 inline-block rounded-md bg-brand-500 px-6 py-3 text-base font-semibold text-white hover:bg-brand-600"
       >
-        🔥 Roast My Resume
+        🔥 Fire This Resume
       </Link>
     </section>
   );
