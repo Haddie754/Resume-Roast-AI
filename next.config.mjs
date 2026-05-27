@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Tell Next.js not to bundle these packages — load them natively via Node.js at runtime
-  serverExternalPackages: ["pdf-parse", "mammoth"],
+  // Next.js 14: exclude these from webpack bundling, load natively via Node.js
+  experimental: {
+    serverComponentsExternalPackages: ["pdf-parse", "mammoth"],
+  },
 };
 
 export default nextConfig;
