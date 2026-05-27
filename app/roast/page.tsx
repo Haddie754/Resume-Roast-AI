@@ -96,6 +96,16 @@ export default function RoastPage() {
       });
       const data = await res.json();
       if (!res.ok) {
+        // Not signed in → redirect to sign in
+        if (res.status === 401) {
+          window.location.href = "/auth/sign-in?next=/roast";
+          return;
+        }
+        // Rate limited → suggest upgrade
+        if (res.status === 429) {
+          setError(data?.error || "You've hit the free limit. Upgrade to Pro for unlimited roasts.");
+          return;
+        }
         throw new Error(data?.detail || data?.error || "Something went wrong.");
       }
       setResult(data.result as RoastResult);

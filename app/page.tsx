@@ -40,7 +40,7 @@ function Hero() {
           See pricing
         </Link>
       </div>
-      <p className="mt-4 text-sm text-zinc-500">No signup required for your first roast.</p>
+      <p className="mt-4 text-sm text-zinc-500">Free account — your first roast is on us.</p>
     </section>
   );
 }
@@ -185,7 +185,7 @@ function FAQ() {
     },
     {
       q: "Do I need to sign up?",
-      a: "No account needed for your first roast. You can save and track your roasts later if you want.",
+      a: "Yes, but it's free and takes 10 seconds. We save your roast history so you can come back and see your progress.",
     },
   ];
   return (
