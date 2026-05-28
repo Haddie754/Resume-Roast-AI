@@ -22,11 +22,17 @@ export default async function PricingPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const email = user?.email ?? "";
-  const emailParam = email ? `?checkout[email]=${encodeURIComponent(email)}` : "";
+  // Build the checkout query string:
+  //  - prefill the email for a smoother checkout
+  //  - attach the Supabase user id as custom data so the webhook can link the
+  //    payment back to this account and upgrade the right user automatically
+  const params = new URLSearchParams();
+  if (user?.email) params.set("checkout[email]", user.email);
+  if (user?.id) params.set("checkout[custom][user_id]", user.id);
+  const query = params.toString() ? `?${params.toString()}` : "";
 
-  const plusCheckout = `${LEMON_SQUEEZY_CHECKOUT.plus}${emailParam}`;
-  const proCheckout = `${LEMON_SQUEEZY_CHECKOUT.pro}${emailParam}`;
+  const plusCheckout = `${LEMON_SQUEEZY_CHECKOUT.plus}${query}`;
+  const proCheckout = `${LEMON_SQUEEZY_CHECKOUT.pro}${query}`;
 
   const plans: Plan[] = [
     {
