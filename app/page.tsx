@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Mascot from "@/components/Mascot";
 
 export default function LandingPage() {
   return (
@@ -17,6 +18,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 px-6 py-20 text-center sm:py-28">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.18),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.10),transparent_60%)]" />
+      <Mascot className="mx-auto mb-6 h-28 w-28 drop-shadow-[0_0_30px_rgba(249,115,22,0.45)]" />
       <span className="inline-block rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-wider text-zinc-300">
         For college students who actually want callbacks
       </span>
@@ -129,6 +131,7 @@ function FreeVsPro() {
         <PlanRow
           title="Pro"
           price="$5.99/mo"
+          originalPrice="$8.99"
           features={[
             "Everything in Plus",
             "Full ATS optimization",
@@ -153,11 +156,13 @@ function FreeVsPro() {
 function PlanRow({
   title,
   price,
+  originalPrice,
   features,
   highlight,
 }: {
   title: string;
   price: string;
+  originalPrice?: string;
   features: string[];
   highlight?: boolean;
 }) {
@@ -169,9 +174,14 @@ function PlanRow({
           : "border-white/10 bg-zinc-900/60"
       }`}
     >
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between gap-2">
         <h3 className="text-xl font-bold text-white">{title}</h3>
-        <span className="text-2xl font-extrabold text-white">{price}</span>
+        <span className="flex items-baseline gap-1.5">
+          {originalPrice && (
+            <span className="text-base font-bold text-zinc-500 line-through">{originalPrice}</span>
+          )}
+          <span className="text-2xl font-extrabold text-white">{price}</span>
+        </span>
       </div>
       <ul className="mt-4 space-y-2 text-zinc-300">
         {features.map((f) => (

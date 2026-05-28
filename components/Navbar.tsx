@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Mascot from "@/components/Mascot";
 import { createClient } from "@/lib/supabase/server";
 
 const links = [
@@ -16,7 +17,7 @@ export default async function Navbar() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/80 backdrop-blur">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-bold text-white">
-          <span className="text-2xl">🔥</span>
+          <Mascot className="h-8 w-8" />
           <span className="text-lg tracking-tight">FireThis</span>
         </Link>
         <div className="hidden items-center gap-1 sm:flex">

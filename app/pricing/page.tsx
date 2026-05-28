@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 interface Plan {
   name: string;
   price: string;
+  originalPrice?: string;
+  saveNote?: string;
   cadence: string;
   description: string;
   features: string[];
@@ -67,6 +69,8 @@ export default async function PricingPage() {
     {
       name: "Pro",
       price: "$5.99",
+      originalPrice: "$8.99",
+      saveNote: "33% off — limited time",
       cadence: "per month",
       description: "The full toolkit, including F-1 / OPT support.",
       features: [
@@ -129,10 +133,20 @@ export default async function PricingPage() {
             )}
             <h2 className="text-2xl font-bold text-white">{plan.name}</h2>
             <p className="mt-1 text-sm text-zinc-400">{plan.description}</p>
-            <div className="mt-6 flex items-baseline gap-1">
+            <div className="mt-6 flex items-baseline gap-2">
+              {plan.originalPrice && (
+                <span className="text-2xl font-bold text-zinc-500 line-through">
+                  {plan.originalPrice}
+                </span>
+              )}
               <span className="text-5xl font-extrabold text-white">{plan.price}</span>
               <span className="text-zinc-400">/ {plan.cadence}</span>
             </div>
+            {plan.saveNote && (
+              <span className="mt-2 inline-block w-fit rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300">
+                {plan.saveNote}
+              </span>
+            )}
 
             <ul className="mt-6 flex-1 space-y-2 text-zinc-200">
               {plan.features.map((f) => (

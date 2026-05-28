@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Mascot from "@/components/Mascot";
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <div>
             <div className="flex items-center gap-2 text-white">
-              <span className="text-xl">🔥</span>
+              <Mascot className="h-7 w-7" />
               <span className="font-semibold">FireThis</span>
             </div>
             <p className="mt-1 text-sm text-zinc-400">
