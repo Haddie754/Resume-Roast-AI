@@ -25,8 +25,8 @@ export default async function PricingPage() {
   const email = user?.email ?? "";
   const emailParam = email ? `?checkout[email]=${encodeURIComponent(email)}` : "";
 
+  const plusCheckout = `${LEMON_SQUEEZY_CHECKOUT.plus}${emailParam}`;
   const proCheckout = `${LEMON_SQUEEZY_CHECKOUT.pro}${emailParam}`;
-  const intlProCheckout = `${LEMON_SQUEEZY_CHECKOUT.international_pro}${emailParam}`;
 
   const plans: Plan[] = [
     {
@@ -36,44 +36,44 @@ export default async function PricingPage() {
       description: "Get a taste of the fire.",
       features: [
         "1 resume roast per month",
-        "Cooked Score + diagnosis",
+        "Cooked Score plus diagnosis",
         "Top 3 fixes",
       ],
       cta: user ? "You're on Free" : "Start free",
       href: user ? "/roast" : "/auth/sign-up",
     },
     {
-      name: "Pro",
-      price: "$3.99",
+      name: "Plus",
+      price: "$4.99",
       cadence: "per month",
       description: "Everything you need to actually land interviews.",
       features: [
         "Unlimited resume roasts",
-        "Resume Worker (tailor to any JD)",
+        "Resume Worker (tailor to any job)",
         "Cover Letter Writer",
-        "ATS optimization + keyword match",
-        "Saved roast history",
+        "Basic ATS optimization",
       ],
-      cta: "Upgrade to Pro",
-      href: proCheckout,
+      cta: "Upgrade to Plus",
+      href: plusCheckout,
       highlight: true,
       badge: "Most popular",
     },
     {
-      name: "International Pro",
-      price: "$7.99",
+      name: "Pro",
+      price: "$5.99",
       cadence: "per month",
-      description: "Built for F-1 / OPT students fighting for sponsorship.",
+      description: "The full toolkit, including F-1 / OPT support.",
       features: [
-        "Everything in Pro",
-        "Sponsorship-aware resume feedback",
-        "OPT / CPT timeline guidance",
+        "Everything in Plus",
+        "Full ATS optimization",
+        "Saved roast history",
+        "F-1 / OPT job strategy",
         "Visa-friendly company targeting",
-        "Cover letters that handle visa context",
+        "Priority support",
       ],
-      cta: "Upgrade to International Pro",
-      href: intlProCheckout,
-      badge: "F-1 friendly",
+      cta: "Upgrade to Pro",
+      href: proCheckout,
+      badge: "Best value",
     },
   ];
 
@@ -94,6 +94,9 @@ export default async function PricingPage() {
               to get your first roast on us.
             </>
           )}
+        </p>
+        <p className="mt-3 inline-block rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm font-semibold text-emerald-300">
+          Cancel anytime. No contracts, no hassle.
         </p>
       </header>
 
@@ -163,8 +166,8 @@ export default async function PricingPage() {
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6 text-center text-sm text-zinc-400">
-        Questions? <Link href="/roast" className="text-brand-400 hover:underline">Try the free roast</Link> first
-        — no card required.
+        Not sure yet? <Link href="/roast" className="text-brand-400 hover:underline">Try the free roast</Link> first.
+        No card required.
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -173,8 +176,8 @@ export default async function PricingPage() {
           a="Yes. Cancel from your billing portal in one click. No retention calls, no guilt."
         />
         <FaqItem
-          q="What's the difference between Pro and Intl Pro?"
-          a="Intl Pro adds F-1 / OPT-specific feedback, sponsorship signal, and visa-friendly company targeting."
+          q="What's the difference between Plus and Pro?"
+          a="Pro adds full ATS optimization, saved history, F-1 / OPT job strategy, and priority support."
         />
         <FaqItem
           q="Is my data safe?"

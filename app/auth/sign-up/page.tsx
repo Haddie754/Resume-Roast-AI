@@ -61,7 +61,7 @@ export default function SignUpPage() {
     <div className="mx-auto max-w-sm space-y-6 py-12">
       <div className="text-center">
         <h1 className="text-3xl font-extrabold text-white">Create account</h1>
-        <p className="mt-2 text-zinc-400">Start with a free roast — no card needed</p>
+        <p className="mt-2 text-zinc-400">Start with a free roast. No card needed.</p>
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6 space-y-4">

@@ -7,6 +7,7 @@ import {
   buildRoastPrompt,
 } from "@/lib/prompts/resumeRoastPrompt";
 import { createClient } from "@/lib/supabase/server";
+import { isPaid } from "@/lib/billing";
 
 // Force Node runtime so process.env reads are reliable (Edge can be flaky for some SDKs).
 export const runtime = "nodejs";
@@ -78,12 +79,12 @@ export async function POST(req: NextRequest) {
       .eq("id", user.id);
   }
 
-  // Enforce free tier limit
-  const isPro = profile.plan === "pro" || profile.plan === "international_pro";
-  if (!isPro && roastsUsed >= FREE_MONTHLY_LIMIT) {
+  // Enforce free tier limit (Plus and Pro both get unlimited roasts)
+  const paid = isPaid(profile.plan);
+  if (!paid && roastsUsed >= FREE_MONTHLY_LIMIT) {
     return NextResponse.json(
       {
-        error: "You've used your free roast for this month. Upgrade to Pro for unlimited roasts.",
+        error: "You've used your free roast for this month. Upgrade for unlimited roasts.",
         upgradeUrl: "/pricing",
       },
       { status: 429 }

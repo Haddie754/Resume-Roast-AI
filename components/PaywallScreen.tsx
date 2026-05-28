@@ -46,7 +46,7 @@ export default function PaywallScreen({
                 href="/pricing"
                 className="inline-flex items-center justify-center rounded-md bg-brand-500 px-6 py-3 text-base font-semibold text-white hover:bg-brand-600"
               >
-                Upgrade to Pro
+                See plans
               </Link>
               <Link
                 href="/roast"
@@ -73,8 +73,8 @@ export default function PaywallScreen({
           )}
         </div>
 
-        <p className="mt-6 text-xs text-zinc-500">
-          $3.99/month • Cancel anytime • International Pro: $7.99/month
+        <p className="mt-6 text-sm font-semibold text-emerald-300">
+          Plus $4.99/mo · Pro $5.99/mo · Cancel anytime
         </p>
       </div>
     </div>

@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "FireThis — Get Fired Up. Get Hired.",
+  title: "FireThis: Get Fired Up. Get Hired.",
   description:
-    "Brutally honest AI feedback on your resume — built for college students, with dedicated F-1 / OPT support. Get hired faster.",
+    "Brutally honest AI feedback on your resume, built for college students, with dedicated F-1 / OPT support. Get hired faster.",
 };
 
 export default function RootLayout({

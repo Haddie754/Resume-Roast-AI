@@ -24,7 +24,7 @@ function Hero() {
         Get <span className="text-brand-500">Fired.</span> Get Hired.
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300">
-        Brutally honest AI feedback on your resume — with real fixes that get you interviews. Built for students, with dedicated F-1 / OPT support.
+        Brutally honest AI feedback on your resume, with real fixes that get you interviews. Built for students, with dedicated F-1 / OPT support.
       </p>
       <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Link
@@ -40,7 +40,7 @@ function Hero() {
           See pricing
         </Link>
       </div>
-      <p className="mt-4 text-sm text-zinc-500">Free account — your first roast is on us.</p>
+      <p className="mt-4 text-sm text-zinc-500">Free account, and your first roast is on us. Cancel anytime.</p>
     </section>
   );
 }
@@ -103,9 +103,9 @@ function ExampleRoast() {
 function FreeVsPro() {
   return (
     <section>
-      <h2 className="text-3xl font-bold text-white sm:text-4xl">Free vs Pro</h2>
-      <p className="mt-2 text-zinc-400">Start free. Upgrade when you're ready for more tools.</p>
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
+      <h2 className="text-3xl font-bold text-white sm:text-4xl">Simple pricing</h2>
+      <p className="mt-2 text-zinc-400">Start free. Upgrade when you&apos;re ready for more tools.</p>
+      <div className="mt-8 grid gap-6 md:grid-cols-3">
         <PlanRow
           title="Free"
           price="$0"
@@ -116,21 +116,36 @@ function FreeVsPro() {
           ]}
         />
         <PlanRow
-          title="Pro"
-          price="$3.99/mo"
+          title="Plus"
+          price="$4.99/mo"
           highlight
           features={[
             "Unlimited roasts",
             "Resume Worker",
             "Cover Letter Writer",
-            "ATS optimization",
-            "Saved resume versions",
+            "Basic ATS optimization",
+          ]}
+        />
+        <PlanRow
+          title="Pro"
+          price="$5.99/mo"
+          features={[
+            "Everything in Plus",
+            "Full ATS optimization",
+            "Saved roast history",
+            "F-1 / OPT job strategy",
+            "Priority support",
           ]}
         />
       </div>
-      <p className="mt-4 text-sm text-zinc-500">
-        International student? <Link href="/pricing" className="text-brand-400 hover:underline">See the International Pro plan →</Link>
-      </p>
+      <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
+        <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 font-semibold text-emerald-300">
+          Cancel anytime. No contracts.
+        </span>
+        <Link href="/pricing" className="text-brand-400 hover:underline">
+          Compare all plans
+        </Link>
+      </div>
     </section>
   );
 }
@@ -181,7 +196,7 @@ function FAQ() {
     },
     {
       q: "Can I upload my resume file?",
-      a: "Yes. You can upload a PDF, Word doc (.docx), or plain text file — or just paste your resume text directly. Either way works.",
+      a: "Yes. You can upload a PDF, Word doc (.docx), or plain text file, or just paste your resume text directly. Either way works.",
     },
     {
       q: "Do I need to sign up?",

@@ -24,7 +24,7 @@ export default async function CoverLetterPage() {
     return (
       <PaywallScreen
         feature="Cover Letter Writer"
-        description="Generate a personalized cover letter, a recruiter outreach message, and three subject lines — all tuned to the company and role you're applying to."
+        description="Generate a personalized cover letter, a recruiter outreach message, and three subject lines, all tuned to the company and role you're applying to."
         signedIn={!!user}
         bullets={[
           "Custom cover letter in your chosen tone",

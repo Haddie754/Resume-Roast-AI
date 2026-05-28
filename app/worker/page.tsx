@@ -25,7 +25,7 @@ export default async function WorkerPage() {
     return (
       <PaywallScreen
         feature="Resume Worker"
-        description="Tailor your resume to any job description. Get an ATS match score, missing keywords, improved bullet points, and a custom summary — all built around the role you actually want."
+        description="Tailor your resume to any job description. Get an ATS match score, missing keywords, improved bullet points, and a custom summary, all built around the role you actually want."
         signedIn={!!user}
         bullets={[
           "ATS match score (0–100) vs the JD",

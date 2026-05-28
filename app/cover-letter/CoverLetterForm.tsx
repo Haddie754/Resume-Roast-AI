@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Button from "@/components/Button";
+import ResumeInput from "@/components/ResumeInput";
 import type { CoverLetterResult } from "@/app/api/cover-letter/route";
 
 type Tone = "professional" | "confident" | "friendly";
@@ -76,15 +77,7 @@ export default function CoverLetterForm() {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <Field label="Resume">
-            <textarea
-              required
-              value={resume}
-              onChange={(e) => setResume(e.target.value)}
-              placeholder="Paste your resume..."
-              className="h-64 w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none focus:border-brand-500"
-            />
-          </Field>
+          <ResumeInput value={resume} onChange={setResume} />
           <Field label="Job description">
             <textarea
               required

@@ -176,7 +176,7 @@ export default function RoastPage() {
             // Not wrapped in <Field> (which uses <label>) to avoid double file-picker trigger
             <div className="block">
               <span className="mb-1 block text-sm font-medium text-zinc-200">Resume file</span>
-              <span className="mb-2 block text-xs text-zinc-500">PDF, DOCX, or TXT — we&apos;ll extract the text automatically.</span>
+              <span className="mb-2 block text-xs text-zinc-500">PDF, DOCX, or TXT. We&apos;ll extract the text automatically.</span>
               <div
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
