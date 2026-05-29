@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleSignUp(e: React.FormEvent) {
@@ -29,7 +30,10 @@ export default function SignUpPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      setDone(true);
+      // Email confirmation is disabled, so signUp returns an active session —
+      // the user is already logged in. Drop them straight into the app.
+      router.push("/roast");
+      router.refresh();
     }
   }
 
@@ -39,22 +43,6 @@ export default function SignUpPage() {
       provider: "google",
       options: { redirectTo: `${location.origin}/auth/callback?next=/roast` },
     });
-  }
-
-  if (done) {
-    return (
-      <div className="mx-auto max-w-sm py-12 text-center space-y-4">
-        <div className="text-5xl">📬</div>
-        <h1 className="text-2xl font-bold text-white">Check your email</h1>
-        <p className="text-zinc-400">
-          We sent a confirmation link to <span className="text-white">{email}</span>.
-          Click it to activate your account.
-        </p>
-        <Link href="/auth/sign-in" className="inline-block text-brand-400 hover:underline text-sm">
-          Back to sign in
-        </Link>
-      </div>
-    );
   }
 
   return (
