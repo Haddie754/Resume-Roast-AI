@@ -22,9 +22,14 @@ export default function Footer() {
             <Link href="/pricing" className="hover:text-white">Pricing</Link>
           </div>
         </div>
-        <p className="mt-8 text-xs text-zinc-500">
-          © {new Date().getFullYear()} FireThis. Not affiliated with your dream company. Yet.
-        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <p className="text-xs text-zinc-500">
+            © {new Date().getFullYear()} FireThis. Not affiliated with your dream company. Yet.
+          </p>
+          <Link href="/terms" className="text-xs text-zinc-500 hover:text-zinc-300">
+            Terms of Service
+          </Link>
+        </div>
       </div>
     </footer>
   );
