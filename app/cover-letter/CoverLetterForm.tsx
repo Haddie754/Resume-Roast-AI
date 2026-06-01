@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import ResumeInput from "@/components/ResumeInput";
+import CopyDownload from "@/components/CopyDownload";
 import type { CoverLetterResult } from "@/app/api/cover-letter/route";
 
 type Tone = "professional" | "confident" | "friendly";
@@ -110,12 +111,18 @@ export default function CoverLetterForm() {
       {result && (
         <div className="animate-fade-in space-y-6">
           <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6">
-            <h3 className="mb-3 text-lg font-semibold text-white">Cover letter</h3>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h3 className="text-lg font-semibold text-white">Cover letter</h3>
+              <CopyDownload text={result.coverLetter} filename="cover-letter.txt" />
+            </div>
             <pre className="whitespace-pre-wrap font-sans text-zinc-100">{result.coverLetter}</pre>
           </section>
 
           <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6">
-            <h3 className="mb-3 text-lg font-semibold text-white">Recruiter message</h3>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h3 className="text-lg font-semibold text-white">Recruiter message</h3>
+              <CopyDownload text={result.recruiterMessage} downloadable={false} />
+            </div>
             <pre className="whitespace-pre-wrap font-sans text-zinc-100">{result.recruiterMessage}</pre>
           </section>
 
