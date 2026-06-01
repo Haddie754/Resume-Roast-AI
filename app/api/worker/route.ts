@@ -3,10 +3,11 @@ import { z } from "zod";
 import { generateAIResponse } from "@/lib/ai/provider";
 import { parseModelJson } from "@/lib/ai/parseJson";
 import {
-  WORKER_SYSTEM_PROMPT,
+  workerSystemPrompt,
   buildWorkerPrompt,
 } from "@/lib/prompts/resumeWorkerPrompt";
 import { requirePaidUser } from "@/lib/auth/requirePaid";
+import { isPro } from "@/lib/billing";
 
 export const runtime = "nodejs";
 
@@ -16,6 +17,17 @@ const WorkerRequestSchema = z.object({
   targetRole: z.string().min(1).max(200),
 });
 
+// Pro-only deeper audit returned alongside the base result.
+export interface WorkerProInsights {
+  atsRedFlags: string[];
+  formattingFixes: string[];
+  visaStrategy: {
+    sponsorshipOutlook: string;
+    companyTargeting: string[];
+    tips: string[];
+  };
+}
+
 export interface WorkerResult {
   atsMatchScore: number;
   matchSummary: string;
@@ -24,6 +36,7 @@ export interface WorkerResult {
   suggestedSummary: string;
   whatToRemove: string[];
   whatToEmphasize: string[];
+  proInsights?: WorkerProInsights;
 }
 
 export async function POST(req: NextRequest) {
@@ -46,13 +59,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Pro users get the deeper ATS + visa-strategy output.
+  const pro = isPro(gate.plan);
+
   try {
-    const ai = await generateAIResponse(buildWorkerPrompt(parsed.data), {
-      system: WORKER_SYSTEM_PROMPT,
+    const ai = await generateAIResponse(buildWorkerPrompt(parsed.data, pro), {
+      system: workerSystemPrompt(pro),
       json: true,
       temperature: 0.5,
     });
     const result = parseModelJson<WorkerResult>(ai.text);
+    // Never leak Pro output to a non-Pro plan, even if the model returns it.
+    if (!pro) delete result.proInsights;
     return NextResponse.json({ result, provider: ai.provider, model: ai.model });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";

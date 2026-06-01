@@ -149,6 +149,73 @@ function WorkerResultView({ result }: { result: WorkerResult }) {
           </ul>
         </section>
       </div>
+
+      {result.proInsights && <ProInsightsView insights={result.proInsights} />}
+    </div>
+  );
+}
+
+function ProBadge() {
+  return (
+    <span className="inline-block rounded-full bg-brand-500/30 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-brand-100">
+      Pro
+    </span>
+  );
+}
+
+function ProInsightsView({
+  insights,
+}: {
+  insights: NonNullable<WorkerResult["proInsights"]>;
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3 pt-2">
+        <h2 className="text-xl font-bold text-white">Pro insights</h2>
+        <ProBadge />
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <section className="rounded-2xl border border-brand-500/30 bg-zinc-900/60 p-6">
+          <h3 className="mb-3 text-lg font-semibold text-white">ATS red flags</h3>
+          <ul className="list-disc space-y-1 pl-5 text-zinc-200">
+            {insights.atsRedFlags.map((x, i) => <li key={i}>{x}</li>)}
+          </ul>
+        </section>
+        <section className="rounded-2xl border border-brand-500/30 bg-zinc-900/60 p-6">
+          <h3 className="mb-3 text-lg font-semibold text-white">Formatting fixes</h3>
+          <ul className="list-disc space-y-1 pl-5 text-zinc-200">
+            {insights.formattingFixes.map((x, i) => <li key={i}>{x}</li>)}
+          </ul>
+        </section>
+      </div>
+
+      <section className="rounded-2xl border border-blue-500/30 bg-zinc-900/60 p-6">
+        <div className="mb-3 flex items-center gap-3">
+          <h3 className="text-lg font-semibold text-white">F-1 / OPT visa strategy</h3>
+          <ProBadge />
+        </div>
+        <p className="text-zinc-200">{insights.visaStrategy.sponsorshipOutlook}</p>
+
+        <div className="mt-5 grid gap-6 md:grid-cols-2">
+          <div>
+            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-300">
+              Where to aim
+            </p>
+            <ul className="list-disc space-y-1 pl-5 text-zinc-200">
+              {insights.visaStrategy.companyTargeting.map((x, i) => <li key={i}>{x}</li>)}
+            </ul>
+          </div>
+          <div>
+            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-400">
+              Tips
+            </p>
+            <ul className="list-disc space-y-1 pl-5 text-zinc-200">
+              {insights.visaStrategy.tips.map((x, i) => <li key={i}>{x}</li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

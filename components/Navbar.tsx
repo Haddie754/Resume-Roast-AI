@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Mascot from "@/components/Mascot";
 import { createClient } from "@/lib/supabase/server";
+import { isPro } from "@/lib/billing";
 
-const links = [
+const baseLinks = [
   { href: "/roast", label: "Roast" },
   { href: "/worker", label: "Worker" },
   { href: "/cover-letter", label: "Cover Letter" },
@@ -12,6 +13,21 @@ const links = [
 export default async function Navbar() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
+
+  // Show the History link only to Pro users.
+  let pro = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("plan")
+      .eq("id", user.id)
+      .single();
+    pro = isPro(profile?.plan);
+  }
+
+  const links = pro
+    ? [...baseLinks, { href: "/history", label: "History" }]
+    : baseLinks;
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/80 backdrop-blur">
