@@ -25,6 +25,6 @@ export const PLAN_PRICES = {
 // NOTE: the link IDs stay the same even after you rename / reprice a product
 // in Lemon Squeezy, so keep these stable and just edit the product itself.
 export const LEMON_SQUEEZY_CHECKOUT = {
-  plus: "https://firethis.lemonsqueezy.com/checkout/buy/ada5a2a2-d487-4d52-8a08-9bce3968c819",
-  pro: "https://firethis.lemonsqueezy.com/checkout/buy/6ecff348-75e3-473b-aafb-e7856f4f5920",
+  plus: "https://firethis.lemonsqueezy.com/checkout/buy/bab15ecd-70dd-473b-af8e-9c1752777e5c",
+  pro: "https://firethis.lemonsqueezy.com/checkout/buy/42cbe315-8a5f-4ac3-85fa-4370d0fa4a6c",
 } as const;
