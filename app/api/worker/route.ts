@@ -6,8 +6,12 @@ import {
   workerSystemPrompt,
   buildWorkerPrompt,
 } from "@/lib/prompts/resumeWorkerPrompt";
-import { requirePaidUser } from "@/lib/auth/requirePaid";
-import { isPro } from "@/lib/billing";
+import { createClient } from "@/lib/supabase/server";
+import { isPro, isPaid } from "@/lib/billing";
+import {
+  checkFreeMonthlyLimit,
+  recordFreeMonthlyUse,
+} from "@/lib/auth/freeMonthlyLimit";
 
 export const runtime = "nodejs";
 
@@ -40,10 +44,61 @@ export interface WorkerResult {
 }
 
 export async function POST(req: NextRequest) {
-  // Gate: must be signed in + on a paid plan
-  const gate = await requirePaidUser();
-  if (!gate.ok) return gate.response;
+  // 1. Require authentication.
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json(
+      { error: "Please sign in to use the Resume Worker." },
+      { status: 401 },
+    );
+  }
 
+  // 2. Load the user's plan.
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("id", user.id)
+    .single();
+  if (profileError || !profile) {
+    console.error("[/api/worker] profile fetch failed:", profileError);
+    return NextResponse.json(
+      { error: "Could not load your account. Try refreshing." },
+      { status: 500 },
+    );
+  }
+  const paid = isPaid(profile.plan);
+  const pro = isPro(profile.plan);
+
+  // 3. Enforce the free monthly limit (paid plans bypass).
+  let limit;
+  try {
+    limit = await checkFreeMonthlyLimit(supabase, user.id, "worker", paid);
+  } catch (err) {
+    console.error("[/api/worker] usage check failed:", err);
+    // A metering hiccup must never block a paying customer (they're unlimited).
+    if (!paid) {
+      return NextResponse.json(
+        { error: "Could not check your usage. Try refreshing." },
+        { status: 500 },
+      );
+    }
+    limit = { allowed: true, usage: 0, month: new Date().toISOString().slice(0, 7) };
+  }
+  if (!limit.allowed) {
+    return NextResponse.json(
+      {
+        error:
+          "You've used your free Resume Worker run for this month. Upgrade for unlimited.",
+        upgradeUrl: "/pricing",
+      },
+      { status: 429 },
+    );
+  }
+
+  // 4. Validate input.
   let body: unknown;
   try {
     body = await req.json();
@@ -59,9 +114,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Pro users get the deeper ATS + visa-strategy output.
-  const pro = isPro(gate.plan);
-
+  // 5. Generate. Pro users get the deeper ATS + visa-strategy output.
   try {
     const ai = await generateAIResponse(buildWorkerPrompt(parsed.data, pro), {
       system: workerSystemPrompt(pro),
@@ -71,6 +124,15 @@ export async function POST(req: NextRequest) {
     const result = parseModelJson<WorkerResult>(ai.text);
     // Never leak Pro output to a non-Pro plan, even if the model returns it.
     if (!pro) delete result.proInsights;
+
+    // 6. Count this successful run (failures above don't burn the free try).
+    //    Recording must never fail a successful generation.
+    try {
+      await recordFreeMonthlyUse(supabase, user.id, "worker", limit);
+    } catch (err) {
+      console.error("[/api/worker] usage record failed:", err);
+    }
+
     return NextResponse.json({ result, provider: ai.provider, model: ai.model });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";

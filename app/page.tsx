@@ -113,8 +113,9 @@ function FreeVsPro() {
           price="$0"
           features={[
             "1 resume roast per month",
-            "Cooked Score",
-            "Top 3 fixes",
+            "1 Resume Worker run per month",
+            "1 cover letter per month",
+            "Cooked Score + top 3 fixes",
           ]}
         />
         <PlanRow

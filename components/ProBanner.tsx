@@ -17,13 +17,9 @@ export default async function ProBanner() {
       <div className="flex flex-col items-start justify-between gap-3 rounded-2xl border border-brand-500/30 bg-brand-500/10 p-4 text-sm text-brand-100 sm:flex-row sm:items-center">
         <div>
           <span className="rounded-full bg-brand-500/30 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-brand-100">
-            Paid feature
+            1 free / month
           </span>{" "}
-          Sign in to unlock this. Free roasts are on the{" "}
-          <Link href="/roast" className="underline">
-            roast page
-          </Link>
-          .
+          Sign in to use your free monthly run. Upgrade anytime for unlimited.
         </div>
         <Link
           href="/auth/sign-in"
@@ -60,9 +56,9 @@ export default async function ProBanner() {
     <div className="flex flex-col items-start justify-between gap-3 rounded-2xl border border-brand-500/30 bg-brand-500/10 p-4 text-sm text-brand-100 sm:flex-row sm:items-center">
       <div>
         <span className="rounded-full bg-brand-500/30 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-brand-100">
-          Paid feature
+          Free plan
         </span>{" "}
-        Upgrade to use this tool. Cancel anytime.
+        You get 1 free run a month on each tool. Upgrade for unlimited. Cancel anytime.
       </div>
       <Link
         href="/pricing"

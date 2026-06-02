@@ -30,8 +30,12 @@ export default function WorkerForm() {
           window.location.href = "/auth/sign-in?next=/worker";
           return;
         }
-        if (res.status === 402) {
-          window.location.href = data?.upgradeUrl || "/pricing";
+        // Out of free runs this month → show upgrade prompt inline.
+        if (res.status === 429 || res.status === 402) {
+          setError(
+            data?.error ||
+              "You've used your free Resume Worker run this month. Upgrade for unlimited.",
+          );
           return;
         }
         throw new Error(data?.error || "Something went wrong.");

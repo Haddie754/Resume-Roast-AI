@@ -34,8 +34,12 @@ export default function CoverLetterForm() {
           window.location.href = "/auth/sign-in?next=/cover-letter";
           return;
         }
-        if (res.status === 402) {
-          window.location.href = data?.upgradeUrl || "/pricing";
+        // Out of free runs this month → show upgrade prompt inline.
+        if (res.status === 429 || res.status === 402) {
+          setError(
+            data?.error ||
+              "You've used your free cover letter this month. Upgrade for unlimited.",
+          );
           return;
         }
         throw new Error(data?.error || "Something went wrong.");

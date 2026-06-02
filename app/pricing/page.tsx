@@ -44,8 +44,9 @@ export default async function PricingPage() {
       description: "Get a taste of the fire.",
       features: [
         "1 resume roast per month",
-        "Cooked Score plus diagnosis",
-        "Top 3 fixes",
+        "1 Resume Worker run per month",
+        "1 cover letter per month",
+        "Cooked Score, diagnosis & top fixes",
       ],
       cta: user ? "You're on Free" : "Start free",
       href: user ? "/roast" : "/auth/sign-up",
