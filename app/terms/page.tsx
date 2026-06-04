@@ -145,10 +145,10 @@ export default function TermsPage() {
         <p>
           If you have any questions about these Terms, please contact us at{" "}
           <a
-            href="mailto:harrykong5@gmail.com"
+            href="mailto:cookiej180@gmail.com"
             className="text-brand-400 hover:underline"
           >
-            harrykong5@gmail.com
+            cookiej180@gmail.com
           </a>
           .
         </p>
