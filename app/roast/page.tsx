@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Button from "@/components/Button";
 import RoastResultView from "@/components/RoastResult";
+import BuildResumeButton from "@/components/resume/BuildResumeButton";
 import type { RoastResult } from "@/app/api/roast/route";
 
 const ROLES = [
@@ -314,7 +315,7 @@ export default function RoastPage() {
         </Button>
       </form>
 
-      <div id="results">
+      <div id="results" className="space-y-6">
         {loading && (
           <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-8 text-center text-zinc-400">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-zinc-600 border-t-brand-500" />
@@ -322,6 +323,13 @@ export default function RoastPage() {
           </div>
         )}
         {result && <RoastResultView result={result} />}
+        {result && (
+          <BuildResumeButton
+            resume={form.resume}
+            targetRole={form.targetRole}
+            signInNext="/roast"
+          />
+        )}
       </div>
     </div>
   );

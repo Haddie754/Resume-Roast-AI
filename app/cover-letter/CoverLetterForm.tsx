@@ -4,11 +4,12 @@ import { useState } from "react";
 import Button from "@/components/Button";
 import ResumeInput from "@/components/ResumeInput";
 import CopyDownload from "@/components/CopyDownload";
+import CoverLetterDownload from "@/components/resume/CoverLetterDownload";
 import type { CoverLetterResult } from "@/app/api/cover-letter/route";
 
 type Tone = "professional" | "confident" | "friendly";
 
-export default function CoverLetterForm() {
+export default function CoverLetterForm({ isPro }: { isPro: boolean }) {
   const [resume, setResume] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -118,6 +119,13 @@ export default function CoverLetterForm() {
             <div className="mb-3 flex items-center justify-between gap-3">
               <h3 className="text-lg font-semibold text-white">Cover letter</h3>
               <CopyDownload text={result.coverLetter} filename="cover-letter.txt" />
+            </div>
+            <div className="mb-3">
+              <CoverLetterDownload
+                text={result.coverLetter}
+                company={companyName}
+                isPro={isPro}
+              />
             </div>
             <pre className="whitespace-pre-wrap font-sans text-zinc-100">{result.coverLetter}</pre>
           </section>

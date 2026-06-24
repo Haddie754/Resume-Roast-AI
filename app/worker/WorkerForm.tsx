@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import ResumeInput from "@/components/ResumeInput";
+import BuildResumeButton from "@/components/resume/BuildResumeButton";
 import type { WorkerResult } from "@/app/api/worker/route";
 
 export default function WorkerForm() {
@@ -93,7 +94,17 @@ export default function WorkerForm() {
         </div>
       )}
 
-      {result && <WorkerResultView result={result} />}
+      {result && (
+        <div className="space-y-6">
+          <WorkerResultView result={result} />
+          <BuildResumeButton
+            resume={resume}
+            targetRole={targetRole}
+            jobDescription={jobDescription}
+            signInNext="/worker"
+          />
+        </div>
+      )}
     </>
   );
 }

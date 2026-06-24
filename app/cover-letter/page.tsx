@@ -1,7 +1,25 @@
 import ProBanner from "@/components/ProBanner";
 import CoverLetterForm from "./CoverLetterForm";
+import { createClient } from "@/lib/supabase/server";
+import { isPro } from "@/lib/billing";
 
-export default function CoverLetterPage() {
+export default async function CoverLetterPage() {
+  // Polished PDF/Word downloads are Pro-only — read the plan to gate them.
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let pro = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("plan")
+      .eq("id", user.id)
+      .single();
+    pro = isPro(profile?.plan);
+  }
+
   return (
     <div className="space-y-8">
       <header>
@@ -15,7 +33,7 @@ export default function CoverLetterPage() {
 
       <ProBanner />
 
-      <CoverLetterForm />
+      <CoverLetterForm isPro={pro} />
     </div>
   );
 }
