@@ -322,7 +322,6 @@ export default function RoastPage() {
             <p className="mt-4">Firing up the grill...</p>
           </div>
         )}
-        {result && <RoastResultView result={result} />}
         {result && (
           <BuildResumeButton
             resume={form.resume}
@@ -330,6 +329,7 @@ export default function RoastPage() {
             signInNext="/roast"
           />
         )}
+        {result && <RoastResultView result={result} />}
       </div>
     </div>
   );

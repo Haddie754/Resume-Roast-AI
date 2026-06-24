@@ -96,13 +96,13 @@ export default function WorkerForm() {
 
       {result && (
         <div className="space-y-6">
-          <WorkerResultView result={result} />
           <BuildResumeButton
             resume={resume}
             targetRole={targetRole}
             jobDescription={jobDescription}
             signInNext="/worker"
           />
+          <WorkerResultView result={result} />
         </div>
       )}
     </>

@@ -95,6 +95,7 @@ HARD RULES:
 4. Keep it ATS-safe: plain text content, standard section names, no tables/columns/graphics implied. The output is pure structured data; formatting happens later.
 5. If a target role or job description is given, tailor the summary, skill ordering, and bullet emphasis toward it — using only the candidate's real background.
 6. Omit any field you don't have real data for (don't output empty strings for missing contact fields).
+7. AIM FOR ONE PAGE. Prioritize the most relevant experience for the target role: keep 2-4 tight bullets for recent/relevant roles, fewer for older ones, and drop the least-relevant items if needed. Favor concise, high-impact bullets over volume.
 
 OUTPUT FORMAT — strict JSON, no markdown fences:
 
