@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ResumePreview from "./ResumePreview";
+import ResumeEditor from "./ResumeEditor";
+import { toDraft, fromDraft, type DraftResume } from "@/lib/resume/resumeDraft";
 import type { StructuredResume } from "@/lib/prompts/buildResumePrompt";
 
 function safeName(name: string): string {
   return (
     (name || "resume").trim().replace(/\s+/g, "_").replace(/[^\w-]/g, "") || "resume"
   );
+}
+
+// Plain-data deep clone — the draft only holds strings/booleans/arrays.
+function clone(d: DraftResume): DraftResume {
+  return JSON.parse(JSON.stringify(d)) as DraftResume;
 }
 
 function triggerDownload(blob: Blob, filename: string) {
@@ -21,11 +28,23 @@ function triggerDownload(blob: Blob, filename: string) {
   URL.revokeObjectURL(url);
 }
 
-// HTML preview (reliable in every browser) + on-click PDF/DOCX generation.
-// The heavy libraries load only when a download button is clicked.
+// HTML preview (reliable in every browser) + on-click PDF/DOCX generation, all
+// driven by an editable draft. Toggling/editing is instant and never hits the AI.
 export default function ResumeDownloadPanel({ resume }: { resume: StructuredResume }) {
+  const [draft, setDraft] = useState<DraftResume>(() => toDraft(resume));
+  const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState<null | "pdf" | "docx">(null);
-  const base = safeName(resume.name);
+
+  const update = (mut: (d: DraftResume) => void) =>
+    setDraft((prev) => {
+      const next = clone(prev);
+      mut(next);
+      return next;
+    });
+
+  // Everything (preview + downloads) renders from the edited, trimmed data.
+  const final = useMemo(() => fromDraft(draft), [draft]);
+  const base = safeName(final.name);
 
   async function downloadPdf() {
     setBusy("pdf");
@@ -34,7 +53,7 @@ export default function ResumeDownloadPanel({ resume }: { resume: StructuredResu
         import("@react-pdf/renderer"),
         import("./ResumePdf"),
       ]);
-      const blob = await pdf(<ResumePdf resume={resume} />).toBlob();
+      const blob = await pdf(<ResumePdf resume={final} />).toBlob();
       triggerDownload(blob, `${base}.pdf`);
     } finally {
       setBusy(null);
@@ -45,7 +64,7 @@ export default function ResumeDownloadPanel({ resume }: { resume: StructuredResu
     setBusy("docx");
     try {
       const { buildResumeDocx } = await import("@/lib/resume/buildDocx");
-      const blob = await buildResumeDocx(resume);
+      const blob = await buildResumeDocx(final);
       triggerDownload(blob, `${base}.docx`);
     } finally {
       setBusy(null);
@@ -56,7 +75,7 @@ export default function ResumeDownloadPanel({ resume }: { resume: StructuredResu
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={downloadPdf}
@@ -73,9 +92,18 @@ export default function ResumeDownloadPanel({ resume }: { resume: StructuredResu
         >
           {busy === "docx" ? "Building…" : "Download DOCX"}
         </button>
+        <button
+          type="button"
+          onClick={() => setEditing((v) => !v)}
+          className={`${btn} ml-auto border border-white/10 bg-white/5 text-white hover:bg-white/10`}
+        >
+          {editing ? "Done editing" : "Edit & trim"}
+        </button>
       </div>
 
-      <ResumePreview resume={resume} />
+      {editing && <ResumeEditor draft={draft} update={update} />}
+
+      <ResumePreview resume={final} />
     </div>
   );
 }
