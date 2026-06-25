@@ -5,6 +5,7 @@ export default function LandingPage() {
   return (
     <div className="space-y-24">
       <Hero />
+      <NotJustChatGPT />
       <HowItWorks />
       <ExampleRoast />
       <FreeVsPro />
@@ -43,6 +44,64 @@ function Hero() {
         </Link>
       </div>
       <p className="mt-4 text-sm text-zinc-500">Free account, and your first roast is on us. Cancel anytime.</p>
+    </section>
+  );
+}
+
+function NotJustChatGPT() {
+  const chatgpt = [
+    "Generic advice you interpret yourself",
+    "You do all the formatting",
+    "No ATS structure or score",
+    "Forgets you next session",
+    "No visa guidance",
+  ];
+  const firethis = [
+    "A Cooked Score + exact line-by-line fixes",
+    "Download a formatted PDF & Word resume",
+    "ATS-safe template, built in",
+    "Saved history tracks your progress",
+    "F-1 / OPT strategy for international students",
+  ];
+  return (
+    <section>
+      <p className="text-sm font-semibold uppercase tracking-wider text-brand-400">
+        Why not just use ChatGPT?
+      </p>
+      <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
+        Anyone can ask ChatGPT. We hand you the resume.
+      </h2>
+      <p className="mt-3 max-w-2xl text-zinc-400">
+        ChatGPT gives you a wall of advice you still have to act on. FireThis gives you a
+        scored diagnosis, rewritten bullets, and a polished, ATS-ready resume you can download
+        and submit today.
+      </p>
+
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6">
+          <h3 className="text-lg font-semibold text-zinc-300">Just asking ChatGPT</h3>
+          <ul className="mt-4 space-y-3">
+            {chatgpt.map((p) => (
+              <li key={p} className="flex gap-3 text-zinc-400">
+                <span className="text-zinc-600">✕</span>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-2xl border border-brand-500/40 bg-brand-500/5 p-6">
+          <h3 className="text-lg font-semibold text-white">FireThis</h3>
+          <ul className="mt-4 space-y-3">
+            {firethis.map((p) => (
+              <li key={p} className="flex gap-3 text-zinc-200">
+                <span className="text-brand-400">✓</span>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }
