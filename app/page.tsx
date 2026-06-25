@@ -135,6 +135,8 @@ function FreeVsPro() {
           originalPrice="$8.99"
           features={[
             "Everything in Plus",
+            "Resume builder (download PDF & Word)",
+            "Edit & trim to one page",
             "Full ATS optimization",
             "Saved roast history",
             "F-1 / OPT job strategy",

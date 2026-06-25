@@ -73,13 +73,15 @@ export default async function PricingPage() {
       originalPrice: "$8.99",
       saveNote: "33% off — limited time",
       cadence: "per month",
-      description: "The full toolkit, including F-1 / OPT support.",
+      description: "The full toolkit — download a polished, ATS-ready resume.",
       features: [
         "Everything in Plus",
+        "Resume builder: download as PDF & Word",
+        "Edit & trim to one page in-app",
+        "Cover letter PDF & Word export",
         "Full ATS optimization",
         "Saved roast history",
-        "F-1 / OPT job strategy",
-        "Visa-friendly company targeting",
+        "F-1 / OPT strategy & visa targeting",
         "Priority support",
       ],
       cta: "Upgrade to Pro",
@@ -198,7 +200,7 @@ export default async function PricingPage() {
         />
         <FaqItem
           q="What's the difference between Plus and Pro?"
-          a="Pro adds full ATS optimization, saved history, F-1 / OPT job strategy, and priority support."
+          a="Pro adds a downloadable resume builder (edit, trim to one page, export PDF & Word), full ATS optimization, saved history, F-1 / OPT job strategy, and priority support."
         />
         <FaqItem
           q="Is my data safe?"
