@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getAttribution } from "@/lib/attribution";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -23,6 +24,8 @@ export default function SignUpPage() {
       password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback?next=/roast`,
+        // Where this user came from → auth.users.raw_user_meta_data
+        data: getAttribution(),
       },
     });
 
