@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import Button from "@/components/Button";
 import RoastResultView from "@/components/RoastResult";
 import BuildResumeButton from "@/components/resume/BuildResumeButton";
+import { createClient } from "@/lib/supabase/client";
 import type { RoastResult } from "@/app/api/roast/route";
+
+const PENDING_KEY = "ft_pending_roast";
 
 const ROLES = [
   "Software Engineer Intern",
@@ -43,6 +47,35 @@ export default function RoastPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RoastResult | null>(null);
+
+  // Auth-aware "taste before signup": anonymous visitors get a preview + gate.
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [preview, setPreview] = useState<RoastResult | null>(null);
+  const [previewLimited, setPreviewLimited] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      const isIn = !!data.user;
+      setSignedIn(isIn);
+      // Just signed up after a preview? Reveal the full roast they already got.
+      if (isIn) {
+        try {
+          const pending = localStorage.getItem(PENDING_KEY);
+          if (pending) {
+            setResult(JSON.parse(pending) as RoastResult);
+            localStorage.removeItem(PENDING_KEY);
+            setTimeout(
+              () => document.getElementById("results")?.scrollIntoView({ behavior: "smooth" }),
+              80,
+            );
+          }
+        } catch {
+          // localStorage unavailable — no-op.
+        }
+      }
+    });
+  }, []);
 
   // Upload mode state
   const [inputMode, setInputMode] = useState<"paste" | "upload">("paste");
@@ -88,7 +121,44 @@ export default function RoastPage() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setPreview(null);
+    setPreviewLimited(false);
 
+    // Anonymous → free preview (score + diagnosis), then gate the full roast.
+    if (signedIn === false) {
+      try {
+        const res = await fetch("/api/roast/preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || "Something went wrong.");
+        if (data.limited) {
+          setPreviewLimited(true);
+          return;
+        }
+        const r = data.result as RoastResult;
+        setPreview(r);
+        // Stash so the full roast appears after they sign up (no re-run).
+        try {
+          localStorage.setItem(PENDING_KEY, JSON.stringify(r));
+        } catch {
+          // ignore
+        }
+        setTimeout(
+          () => document.getElementById("results")?.scrollIntoView({ behavior: "smooth" }),
+          50,
+        );
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // Signed in → full roast.
     try {
       const res = await fetch("/api/roast", {
         method: "POST",
@@ -255,9 +325,9 @@ export default function RoastPage() {
             </select>
           </Field>
 
-          <Field label="School">
+          <Field label={signedIn === false ? "School (optional)" : "School"}>
             <input
-              required
+              required={signedIn === true}
               value={form.school}
               onChange={(e) => update("school", e.target.value)}
               placeholder="e.g. NYU"
@@ -265,9 +335,9 @@ export default function RoastPage() {
             />
           </Field>
 
-          <Field label="Major">
+          <Field label={signedIn === false ? "Major (optional)" : "Major"}>
             <input
-              required
+              required={signedIn === true}
               value={form.major}
               onChange={(e) => update("major", e.target.value)}
               placeholder="e.g. Computer Science"
@@ -311,8 +381,17 @@ export default function RoastPage() {
         )}
 
         <Button type="submit" disabled={loading} className="w-full sm:w-auto">
-          {loading ? "Cooking..." : "🔥 Roast My Resume"}
+          {loading
+            ? "Cooking..."
+            : signedIn === false
+            ? "🔥 Get my free Cooked Score"
+            : "🔥 Roast My Resume"}
         </Button>
+        {signedIn === false && (
+          <p className="text-xs text-zinc-500">
+            Free instant score — no account needed. Sign up to see your full breakdown.
+          </p>
+        )}
       </form>
 
       <div id="results" className="space-y-6">
@@ -330,8 +409,82 @@ export default function RoastPage() {
           />
         )}
         {result && <RoastResultView result={result} />}
+        {!result && preview && <PreviewGate preview={preview} />}
+        {!result && previewLimited && <PreviewLimited />}
       </div>
     </div>
+  );
+}
+
+function scoreColor(score: number): string {
+  if (score >= 75) return "text-red-400";
+  if (score >= 50) return "text-orange-400";
+  if (score >= 25) return "text-yellow-400";
+  return "text-emerald-400";
+}
+
+// Anonymous "taste": show the score + diagnosis + roast, gate the actionable rest.
+function PreviewGate({ preview }: { preview: RoastResult }) {
+  return (
+    <div className="space-y-6">
+      <section className="rounded-2xl border border-white/10 bg-zinc-900/60 p-6">
+        <div className="flex items-center justify-between gap-3">
+          <span className="rounded-full bg-orange-500/20 px-3 py-1 text-sm font-semibold text-orange-300">
+            🔥 {preview.diagnosis}
+          </span>
+          <span className={`text-5xl font-extrabold ${scoreColor(preview.cookedScore)}`}>
+            {preview.cookedScore}
+            <span className="text-base text-zinc-500">/100</span>
+          </span>
+        </div>
+        <p className="mt-4 text-zinc-200">{preview.roast}</p>
+      </section>
+
+      <section className="relative overflow-hidden rounded-2xl border border-brand-500/40 bg-zinc-900/60 p-6">
+        <div aria-hidden className="select-none blur-[6px]">
+          <h3 className="mb-3 text-lg font-semibold text-white">Your top fixes</h3>
+          <ul className="space-y-2 text-zinc-300">
+            {(preview.topFixes ?? []).slice(0, 5).map((f, i) => (
+              <li key={i}>• {f}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-zinc-950/60 p-6 text-center">
+          <span className="text-2xl">🔒</span>
+          <p className="max-w-md text-zinc-100">
+            Your full roast is ready:{" "}
+            <span className="font-semibold text-white">
+              5 specific problems, exact fixes, and rewritten bullet points.
+            </span>
+          </p>
+          <Link
+            href="/auth/sign-up?next=/roast"
+            className="rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-600"
+          >
+            Sign up free to unlock →
+          </Link>
+          <p className="text-xs text-zinc-500">Takes 10 seconds. No card required.</p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function PreviewLimited() {
+  return (
+    <section className="rounded-2xl border border-brand-500/40 bg-brand-500/5 p-6 text-center">
+      <p className="mx-auto max-w-md text-zinc-100">
+        You&apos;ve used your free preview.{" "}
+        <span className="font-semibold text-white">Sign up free</span> to roast unlimited
+        resumes and unlock your full breakdown.
+      </p>
+      <Link
+        href="/auth/sign-up?next=/roast"
+        className="mt-4 inline-block rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-600"
+      >
+        Sign up free →
+      </Link>
+    </section>
   );
 }
 
