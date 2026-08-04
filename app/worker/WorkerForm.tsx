@@ -230,6 +230,11 @@ function ProInsightsView({
             </ul>
           </div>
         </div>
+        <p className="mt-5 border-t border-white/10 pt-3 text-xs text-zinc-500">
+          General guidance, not legal or immigration advice. Immigration rules are complex and
+          individual — consult a licensed immigration attorney or your school&apos;s DSO before
+          making decisions.
+        </p>
       </section>
     </div>
   );

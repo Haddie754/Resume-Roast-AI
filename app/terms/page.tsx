@@ -8,12 +8,12 @@ export default function TermsPage() {
     <div className="mx-auto max-w-3xl space-y-8 py-12 text-zinc-300">
       <div>
         <h1 className="text-4xl font-extrabold text-white">Terms of Service</h1>
-        <p className="mt-2 text-sm text-zinc-500">Last updated: May 30, 2026</p>
+        <p className="mt-2 text-sm text-zinc-500">Last updated: August 2026</p>
       </div>
 
       <p>
         Welcome to FireThis. By accessing or using our website and services at{" "}
-        <span className="text-white">resume-roast-ai-phi.vercel.app</span> (the
+        <span className="text-white">firethis.app</span> (the
         &ldquo;Service&rdquo;), you agree to be bound by these Terms of Service
         (&ldquo;Terms&rdquo;). Please read them carefully. If you do not agree, do not use
         the Service.
@@ -46,8 +46,8 @@ export default function TermsPage() {
         </p>
         <ul className="mt-3 list-disc space-y-2 pl-5">
           <li>
-            <span className="font-semibold text-white">Free:</span> Limited to 1 resume
-            roast per month.
+            <span className="font-semibold text-white">Free:</span> 1 resume roast, 1 Resume
+            Worker run, and 1 cover letter per month.
           </li>
           <li>
             <span className="font-semibold text-white">Plus ($4.99/mo):</span> Unlimited
@@ -112,6 +112,13 @@ export default function TermsPage() {
           kind. FireThis does not guarantee that the Service will be error-free, uninterrupted,
           or that AI-generated feedback will result in job offers or interview callbacks.
           Feedback is informational only — you are responsible for your own career decisions.
+        </p>
+        <p className="mt-3">
+          AI-generated content may be inaccurate and is not professional career, legal,
+          financial, or immigration advice. Any F-1 / OPT or visa-related content is general
+          information only and is not legal or immigration advice — consult a licensed attorney
+          or your school&rsquo;s DSO. See our full{" "}
+          <a href="/disclaimer" className="text-brand-400 hover:underline">Disclaimer</a> for details.
         </p>
       </Section>
 

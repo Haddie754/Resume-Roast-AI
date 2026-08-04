@@ -29,6 +29,12 @@ export default function Footer() {
           <Link href="/terms" className="text-xs text-zinc-500 hover:text-zinc-300">
             Terms of Service
           </Link>
+          <Link href="/privacy" className="text-xs text-zinc-500 hover:text-zinc-300">
+            Privacy Policy
+          </Link>
+          <Link href="/disclaimer" className="text-xs text-zinc-500 hover:text-zinc-300">
+            Disclaimer
+          </Link>
         </div>
       </div>
     </footer>
