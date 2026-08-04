@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
 import type { RoastResult } from "@/app/api/roast/route";
 
 const PENDING_KEY = "ft_pending_roast";
@@ -17,8 +16,7 @@ function scoreColor(score: number): string {
 // Interactive hero: paste or upload a resume → free Cooked Score right on the
 // homepage, with the full roast gated behind a free sign-up. Signed-in visitors
 // skip the taste entirely and get one CTA into the full tool.
-export default function HeroRoast() {
-  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+export default function HeroRoast({ signedIn }: { signedIn: boolean }) {
   const [resume, setResume] = useState("");
   const [inputMode, setInputMode] = useState<"paste" | "upload">("paste");
   const [loading, setLoading] = useState(false);
@@ -29,11 +27,6 @@ export default function HeroRoast() {
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setSignedIn(!!data.user));
-  }, []);
 
   async function handleFile(file: File) {
     setUploadLoading(true);
@@ -93,7 +86,7 @@ export default function HeroRoast() {
   }
 
   // Signed-in visitors skip the taste — one CTA straight to the full tool.
-  if (signedIn === true) {
+  if (signedIn) {
     return (
       <div className="mt-10">
         <Link

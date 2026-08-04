@@ -1,11 +1,20 @@
 import Link from "next/link";
 import Mascot from "@/components/Mascot";
 import HeroRoast from "@/components/HeroRoast";
+import { createClient } from "@/lib/supabase/server";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  // Read login on the server so signed-in visitors never see the anonymous
+  // preview hero (client-side detection had a flaky/late window).
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const signedIn = !!user;
+
   return (
     <div className="space-y-24">
-      <Hero />
+      <Hero signedIn={signedIn} />
       <NotJustChatGPT />
       <HowItWorks />
       <ExampleRoast />
@@ -16,7 +25,7 @@ export default function LandingPage() {
   );
 }
 
-function Hero() {
+function Hero({ signedIn }: { signedIn: boolean }) {
   return (
     <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 px-6 py-20 text-center sm:py-28">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.18),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.10),transparent_60%)]" />
@@ -30,7 +39,7 @@ function Hero() {
       <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300">
         Brutally honest AI feedback on your resume, with real fixes that get you interviews. Built for students, with dedicated F-1 / OPT support.
       </p>
-      <HeroRoast />
+      <HeroRoast signedIn={signedIn} />
     </section>
   );
 }
