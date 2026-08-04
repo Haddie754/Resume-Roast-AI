@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Mascot from "@/components/Mascot";
+import HeroRoast from "@/components/HeroRoast";
 
 export default function LandingPage() {
   return (
@@ -29,21 +30,7 @@ function Hero() {
       <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300">
         Brutally honest AI feedback on your resume, with real fixes that get you interviews. Built for students, with dedicated F-1 / OPT support.
       </p>
-      <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <Link
-          href="/roast"
-          className="inline-flex items-center gap-2 rounded-md bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-500/20 hover:bg-brand-600"
-        >
-          🔥 Fire This Resume
-        </Link>
-        <Link
-          href="/pricing"
-          className="rounded-md border border-white/10 bg-white/5 px-6 py-3 text-base font-semibold text-white hover:bg-white/10"
-        >
-          See pricing
-        </Link>
-      </div>
-      <p className="mt-4 text-sm text-zinc-500">Free account, and your first roast is on us. Cancel anytime.</p>
+      <HeroRoast />
     </section>
   );
 }
